@@ -3,11 +3,23 @@ from pytube import YouTube
 from moviepy.editor import VideoFileClip
 from transformers import pipeline
 import os
+import tempfile
+from tempfile import NamedTemporaryFile
 
 def save_audio(file):
-    video = VideoFileClip(file.name)
-    video_title = video.filename
-    audio_file = video.audio.to_audiofile("audio.wav")
+    temp_file = NamedTemporaryFile(suffix=".mp4", delete=False)
+    temp_filename = temp_file.name
+
+    file_contents = file.read()
+    temp_file.write(file_contents)
+    temp_file.close()
+
+    video = VideoFileClip(temp_filename)
+    video_title = video.reader.filename
+
+    audio_file = temp_filename.replace(".mp4", ".mp3")
+    video.audio.write_audiofile(audio_file)
+
     return video_title, audio_file
 
 def summarize_video(file):
