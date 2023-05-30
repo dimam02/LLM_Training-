@@ -22,25 +22,31 @@ def save_audio(file):
 
     return video_title, audio_file
 
+# Function to summarize the video
 def summarize_video(file):
     video_title, audio_file = save_audio(file)
-    # Perform audio analysis or transcription analysis
-    # ...
+
     # Use a summarization model to generate a summary
     summarizer = pipeline("summarization")
-    summary = summarizer(transcription_text, max_length=150, min_length=30, do_sample=False)
-    return video_title, summary[0]['summary_text']
+    video_summary = "This is a sample video summary."  # Replace with actual summary generation
 
-st.title("Video Summary Tool")
-st.markdown("Upload a video file to generate a summary.")
+    return video_title, video_summary
 
-uploaded_file = st.file_uploader("Upload Video", type=["mp4"])
+# Main code
+def main():
+    st.title("Video Summary Tool")
+    st.markdown("Upload a video file to generate a summary.")
 
-if st.button("Generate Summary"):
-    if uploaded_file is not None:
-        video_title, video_summary = summarize_video(uploaded_file)
-        st.header(video_title)
-        st.subheader("Summary:")
-        st.write(video_summary)
-    else:
-        st.warning("Please upload a video file.")
+    uploaded_file = st.file_uploader("Upload Video", type=["mp4"])
+
+    if st.button("Generate Summary"):
+        if uploaded_file is not None:
+            video_title, video_summary = summarize_video(uploaded_file)
+            st.header(video_title)
+            st.subheader("Summary:")
+            st.write(video_summary)
+        else:
+            st.warning("Please upload a video file.")
+
+if __name__ == "__main__":
+    main()
